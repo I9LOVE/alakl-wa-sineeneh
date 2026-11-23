@@ -1,0 +1,71 @@
+.checkout-page {
+  direction: rtl;
+  background:
+    linear-gradient(rgba(247, 243, 234, 0.94), rgba(247, 243, 234, 0.94)),
+    url("/Egyptian Feast by the Nile.png") center / cover fixed;
+}
+
+.checkout-page .checkout-shell {
+  width: 100%;
+  max-width: 1100px;
+  margin-inline: auto;
+  padding: 24px 16px 40px;
+}
+
+.checkout-page .checkout-card,
+.checkout-page .checkout-summary,
+.checkout-page .checkout-empty {
+  border: 1px solid rgba(120, 113, 108, 0.16);
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 10px 30px rgba(60, 46, 31, 0.08);
+}
+
+.checkout-page .checkout-card {
+  border-radius: 18px;
+  padding: 20px;
+}
+
+.checkout-page .checkout-summary {
+  border-radius: 18px;
+  padding: 20px;
+}
+
+.checkout-page .checkout-empty {
+  max-width: 620px;
+  margin-inline: auto;
+  border-radius: 18px;
+  padding: 32px 20px;
+  text-align: center;
+}
+
+.checkout-page input,
+.checkout-page textarea {
+  background: #ffffff;
+}
+
+.checkout-page input:focus,
+.checkout-page textarea:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+@media (min-width: 640px) {
+  .checkout-page .checkout-shell {
+    padding: 40px 24px 56px;
+  }
+
+  .checkout-page .checkout-card,
+  .checkout-page .checkout-summary {
+    padding: 24px;
+  }
+}
+
+@media (max-width: 639px) {
+  .checkout-page h1 {
+    font-size: 28px;
+  }
+
+  .checkout-page .checkout-summary {
+    position: static;
+  }
+}
