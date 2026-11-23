@@ -24,7 +24,7 @@ export const products: Product[] = [
   {
     id: "3",
     name: "محشي",
-    price: 100,
+    price: 120,
     image: "/mashy.png",
     description: "محشي مشكل على الطريقة المصرية",
   },
