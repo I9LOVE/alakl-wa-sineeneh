@@ -58,7 +58,7 @@ export default function CheckoutPage() {
     );
 
     const messageLines = [
-      "مرحبًا، أريد تأكيد طلب من Bayti",
+      "مرحبًا، أريد تأكيد طلب من الأكل وسنينه",
       "",
       "البيانات:",
       `الاسم: ${fullName.trim()}`,
