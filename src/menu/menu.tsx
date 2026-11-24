@@ -57,14 +57,14 @@ export default function Menu() {
                   >
                     <img
                       src={product.image}
-                      alt={item.name}
+                      alt={product.name}
                       className="h-16 w-16 rounded-lg object-cover"
                     />
 
                     <div className="min-w-0 flex-1">
-                      <p className="font-bold">{item.name}</p>
+                      <p className="font-bold">{product.name}</p>
                       <p className="text-sm text-gray-500">
-                        {item.price * item.quantity} :جنيه
+                        {product.price * item.quantity} :جنيه
                       </p>
 
                       <div className="mt-2 flex items-center gap-2">
