@@ -1,4 +1,3 @@
-
 "use client";
 
 import {
@@ -9,12 +8,10 @@ import {
   type ReactNode,
 } from "react";
 
-import type { Product } from "./catalog";
+import { products, type Product } from "./catalog";
 
 export type OrderItem = {
   productId: string;
-  name: string;
-  price: number;
   quantity: number;
 };
 
@@ -34,7 +31,6 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const [cart, setCart] = useState<OrderItem[]>([]);
   const [isLoaded, setIsLoaded] = useState(false);
 
- 
   useEffect(() => {
     try {
       const savedCart = localStorage.getItem(STORAGE_KEY);
@@ -42,21 +38,33 @@ export function CartProvider({ children }: { children: ReactNode }) {
       if (savedCart) {
         const parsedCart: unknown = JSON.parse(savedCart);
 
-        if (
-          Array.isArray(parsedCart) &&
-          parsedCart.every(
-            (item) =>
-              item &&
-              typeof item.productId === "string" &&
-              typeof item.name === "string" &&
-              typeof item.price === "number" &&
-              Number.isFinite(item.price) &&
-              typeof item.quantity === "number" &&
-              Number.isInteger(item.quantity) &&
-              item.quantity > 0
-          )
-        ) {
-          setCart(parsedCart);
+        if (Array.isArray(parsedCart)) {
+          const validItems = parsedCart.flatMap((item: unknown): OrderItem[] => {
+            if (typeof item !== "object" || item === null) return [];
+
+            const savedItem = item as Record<string, unknown>;
+            const productId = savedItem.productId;
+            const quantity = savedItem.quantity;
+
+            if (
+              typeof productId !== "string" ||
+              typeof quantity !== "number" ||
+              !Number.isInteger(quantity) ||
+              quantity <= 0
+            ) {
+              return [];
+            }
+
+            const productExists = products.some(
+              (product) => product.id === productId
+            );
+
+            if (!productExists) return [];
+
+            return [{ productId, quantity }];
+          });
+
+          setCart(validItems);
         }
       }
     } catch (error) {
@@ -83,13 +91,13 @@ export function CartProvider({ children }: { children: ReactNode }) {
         (item) => item.productId === product.id
       );
 
-      if (!existingItem && amount > 0) {
+      if (!existingItem) {
+        if (amount <= 0) return currentCart;
+
         return [
           ...currentCart,
           {
             productId: product.id,
-            name: product.name,
-            price: product.price,
             quantity: amount,
           },
         ];
@@ -110,10 +118,13 @@ export function CartProvider({ children }: { children: ReactNode }) {
     0
   );
 
-  const cartTotal = cart.reduce(
-    (total, item) => total + item.price * item.quantity,
-    0
-  );
+  const cartTotal = cart.reduce((total, item) => {
+    const product = products.find(
+      (candidate) => candidate.id === item.productId
+    );
+
+    return product ? total + product.price * item.quantity : total;
+  }, 0);
 
   const value: CartContextValue = {
     cart,
