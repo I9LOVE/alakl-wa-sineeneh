@@ -72,7 +72,7 @@ export default function Menu() {
                           type="button"
                           onClick={() => updateQuantity(product, -1)}
                           className="h-8 w-8 rounded-lg border"
-                          aria-label={`Decrease ${item.name} quantity`}
+                          aria-label={`Decrease ${product.name} quantity`}
                         >
                           −
                         </button>
@@ -83,7 +83,7 @@ export default function Menu() {
                           type="button"
                           onClick={() => updateQuantity(product, 1)}
                           className="h-8 w-8 rounded-lg border"
-                          aria-label={`Increase ${item.name} quantity`}
+                          aria-label={`Increase ${product.name} quantity`}
                         >
                           +
                         </button>
