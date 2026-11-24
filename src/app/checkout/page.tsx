@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { FormEvent, useState } from "react";
 import { useCart } from "../../cart/cart-context";
+import { products } from "../../cart/catalog";
 import Navbar from "../navbar";
 import "./checkout.css";
 
@@ -16,6 +17,13 @@ type FormErrors = {
 
 export default function CheckoutPage() {
   const { cart, cartTotal } = useCart();
+  const cartItems = cart.flatMap((item) => {
+    const product = products.find(
+      (candidate) => candidate.id === item.productId
+    );
+
+    return product ? [{ ...item, product }] : [];
+  });
   const [fullName, setFullName] = useState("");
   const [phone, setPhone] = useState("");
   const [fulfillment, setFulfillment] = useState<Fulfillment>("delivery");
@@ -53,8 +61,8 @@ export default function CheckoutPage() {
       return;
     }
 
-    const productLines = cart.map((item) =>
-      `- ${item.name} × ${item.quantity} — ${item.price} جنيه للقطعة = ${item.price * item.quantity} جنيه`
+    const productLines = cartItems.map((item) =>
+      `- ${item.product.name} × ${item.quantity} — ${item.product.price} جنيه للقطعة = ${item.product.price * item.quantity} جنيه`
     );
 
     const messageLines = [
@@ -101,7 +109,7 @@ export default function CheckoutPage() {
           <h1 className="mt-3 text-3xl font-black">إتمام الطلب</h1>
         </div>
 
-        {cart.length === 0 ? (
+        {cartItems.length === 0 ? (
           <section className="checkout-empty rounded-2xl border border-stone-200 bg-white p-8 text-center shadow-sm">
             <p className="text-xl font-bold">سلتك فارغة</p>
             <p className="mt-2 text-stone-500">أضف بعض الأكلات إلى السلة قبل إتمام الطلب.</p>
@@ -262,16 +270,16 @@ export default function CheckoutPage() {
                 <h2 className="mb-4 text-xl font-bold">ملخص الطلب</h2>
 
                 <div className="space-y-4">
-                  {cart.map((item) => (
+                  {cartItems.map((item) => (
                     <div key={item.productId} className="border-b border-stone-100 pb-4 last:border-0">
                       <div className="flex items-start justify-between gap-3">
                         <div>
-                          <p className="font-bold">{item.name}</p>
+                          <p className="font-bold">{item.product.name}</p>
                           <p className="mt-1 text-sm text-stone-500">
-                            {item.quantity} × {item.price} جنيه
+                            {item.quantity} × {item.product.price} جنيه
                           </p>
                         </div>
-                        <p className="font-bold">{item.price * item.quantity} جنيه</p>
+                        <p className="font-bold">{item.product.price * item.quantity} جنيه</p>
                       </div>
                     </div>
                   ))}
